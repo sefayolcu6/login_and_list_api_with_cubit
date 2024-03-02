@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_case/features/login/view/login_view.dart';
+import 'package:flutter_case/views/login/login_view.dart';
 // import 'package:flutter_case/features/login/view/login_view.dart';
 // import 'package:flutter_case/features/userList/view/userList_view.dart';
 
@@ -24,4 +24,3 @@ class _LoginAppState extends State<LoginApp> {
     );
   }
 }
-///Test

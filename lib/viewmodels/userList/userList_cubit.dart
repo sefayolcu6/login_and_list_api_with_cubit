@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_case/core/state/AppStates.dart';
-import 'package:flutter_case/features/userList/viewModel/userList_repository.dart';
+import 'package:flutter_case/viewmodels/userList/userList_repository.dart';
 
 class UserListCubit extends Cubit<AppStates>{
   final IUserListRepository _userListRepository;

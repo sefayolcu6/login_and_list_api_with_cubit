@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_case/core/consts/constants.dart';
 import 'package:flutter_case/core/state/AppStates.dart';
-import 'package:flutter_case/features/userList/viewModel/userList_cubit.dart';
-import 'package:flutter_case/features/userList/viewModel/userList_repository.dart';
+
+import 'package:flutter_case/viewmodels/userList/userList_cubit.dart';
+import 'package:flutter_case/viewmodels/userList/userList_repository.dart';
 
 class UserList extends StatefulWidget {
   const UserList({super.key});
@@ -28,16 +29,16 @@ class _UserListState extends State<UserList> {
               return const Center(child: CircularProgressIndicator());
             } else if (state is AppSuccess) {
               return ListView.builder(
-                itemCount: state.userListResponse.length,
+                itemCount: state.userListResponse.data!.length,
                 itemBuilder: (context, index) {
                   return  Card(
                     child: ListTile(
                       leading: CircleAvatar(
                         backgroundColor: AppConstants.colorBlue,
-                         backgroundImage: NetworkImage(state.userListResponse[index].data![index].avatar.toString()),
+                         backgroundImage: NetworkImage(state.userListResponse.data![index].avatar.toString()),
                       ),
-                      title: Text(state.userListResponse[index].data![index].firstName.toString()),
-                      subtitle: Text(state.userListResponse[index].data![index].email.toString()),
+                      title: Text(state.userListResponse.data![index].firstName.toString()),
+                      subtitle: Text(state.userListResponse.data![index].email.toString()),
                     ),
                   );
                 },

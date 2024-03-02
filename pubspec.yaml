@@ -39,6 +39,7 @@ dependencies:
   flutter_bloc: ^8.1.4
   lottie: ^2.7.0
   another_flushbar: ^1.12.30
+  dio: ^5.4.1
 
 dev_dependencies:
   flutter_test:
