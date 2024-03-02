@@ -1,9 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter_case/models/userList/user_list_model.dart';
-// import 'package:flutter_case/features/userList/model/user_model.dart';
-// import 'package:flutter_case/features/userList/model/user_list_modelll.dart';
 import 'package:http/http.dart' as http;
 
 abstract class IUserListRepository {

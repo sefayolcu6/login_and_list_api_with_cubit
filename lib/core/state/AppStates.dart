@@ -1,3 +1,4 @@
+import 'package:flutter_case/models/login/login_response.dart';
 import 'package:flutter_case/models/userList/user_list_model.dart';
 // import 'package:flutter_case/features/userList/model/user_list_modelll.dart';
 
@@ -30,7 +31,18 @@ class LoginValidateState extends AppStates{
   final bool isValidate;
   const LoginValidateState(this.isValidate);
 }
-class LoginLoginState extends AppStates{
+class LoginState extends AppStates{
   final bool isLoading;
-  const LoginLoginState(this.isLoading);
+  const LoginState(this.isLoading);
 }
+
+class LoginComplete extends AppStates{
+  final LoginResponseModel model;
+  const LoginComplete(this.model);
+}
+
+
+class LoginLoadingState extends AppStates{
+  final bool isLoading;
+  LoginLoadingState( this.isLoading);
+} 

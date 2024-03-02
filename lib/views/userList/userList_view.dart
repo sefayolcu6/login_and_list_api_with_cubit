@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_case/core/consts/constants.dart';
 import 'package:flutter_case/core/state/AppStates.dart';
+import 'package:flutter_case/models/login/login_response.dart';
 
 import 'package:flutter_case/viewmodels/userList/userList_cubit.dart';
 import 'package:flutter_case/viewmodels/userList/userList_repository.dart';
 
 class UserList extends StatefulWidget {
-  const UserList({super.key});
+  final LoginResponseModel model;
+  const UserList({super.key, required this.model});
 
   @override
   State<UserList> createState() => _UserListState();
