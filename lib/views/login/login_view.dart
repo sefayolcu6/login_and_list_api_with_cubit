@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,16 +33,18 @@ class _LoginViewState extends State<LoginView> with UserLoginInformationValid {
   final FocusNode _passwordFocusNode = FocusNode();
   final String _baseUrl = AppConstants.loginApiPath;
   final String _tokenKey = 'tokenKey';
-  String tokenString = '';
+  String tokenString = 'tokenId';
+  bool isLoggedIn = false;
   //#endregion
   @override
   void initState() {
     super.initState();
+    _checkLoginStatus();
   }
 
-  void _saveToken(String token) async {
+  void _saveToken() async {
     SharedPreferences tokenInfo = await SharedPreferences.getInstance();
-    await tokenInfo.setString(_tokenKey, token);
+    await tokenInfo.setString(_tokenKey, tokenString);
   }
 
   void _getToken() async {
@@ -58,7 +62,21 @@ class _LoginViewState extends State<LoginView> with UserLoginInformationValid {
     });
   }
 
-
+  _checkLoginStatus() async {
+    SharedPreferences tokenInfo = await SharedPreferences.getInstance();
+    bool hasTokenInfo = tokenInfo.containsKey(_tokenKey);
+    inspect(hasTokenInfo);
+    debugPrint(hasTokenInfo.toString());
+    setState(() {
+      isLoggedIn = hasTokenInfo;
+      if (isLoggedIn) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => UserList(model: loginResponseModel)));
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +105,9 @@ class _LoginViewState extends State<LoginView> with UserLoginInformationValid {
                 ),
               ),
             );
-            _userNameTextEditingController.text='';
-            _passwordTextEditingController.text='';
+            _userNameTextEditingController.text = '';
+            _passwordTextEditingController.text = '';
+            _saveToken();
           } else {
             flushbarWidget(
               context,
@@ -211,7 +230,7 @@ class _LoginViewState extends State<LoginView> with UserLoginInformationValid {
           child: ElevatedButton(
             onPressed: () {
               context.read<LoginCubit>().postUserModel();
-              _saveToken(loginResponseModel.token.toString());
+              
             },
             style: ElevatedButton.styleFrom(
                 backgroundColor: AppConstants.colorBlueGrey,
@@ -232,7 +251,6 @@ class _LoginViewState extends State<LoginView> with UserLoginInformationValid {
     );
   }
   //#endregion
-
   //#region forgotPassword
   TextButton _forgotPassword(BuildContext context) {
     return TextButton(
