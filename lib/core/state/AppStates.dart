@@ -1,6 +1,5 @@
 import 'package:flutter_case/models/login/login_response.dart';
 import 'package:flutter_case/models/userList/user_list_model.dart';
-// import 'package:flutter_case/features/userList/model/user_list_modelll.dart';
 
 abstract class AppStates{
   const AppStates();

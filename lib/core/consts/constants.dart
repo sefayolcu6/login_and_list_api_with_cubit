@@ -17,6 +17,8 @@ class AppConstants{
   static const String userNameAreaHintText="Kullanıcı Adı";
   static const String userName="eve.holt@reqres.in";
   static const String password="cityslicka";
+  static const String userList="Kullanıcı Listesi";
+  static const String getList="Listeyi Getir";
 
   //#endregion
 

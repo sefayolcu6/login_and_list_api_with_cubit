@@ -41,19 +41,24 @@ class _LoginViewState extends State<LoginView> with UserLoginInformationValid {
     super.initState();
     _checkLoginStatus();
   }
-
+  //#region verilen değeri kendi key değeri ile (giriş yap fonksiyonu başarılı bir şekilde çalıştığında) 
+  //SharedPreferences'a kaydetmeyi sağlar.
   void _saveToken() async {
     SharedPreferences tokenInfo = await SharedPreferences.getInstance();
     await tokenInfo.setString(_tokenKey, tokenString);
   }
-
+  //#endregion
+  
+  //#region _tokenKey keyine ulaşmamızı sağlar
   void _getToken() async {
     SharedPreferences tokenInfo = await SharedPreferences.getInstance();
     setState(() {
       tokenString = tokenInfo.getString(_tokenKey) ?? '';
     });
   }
+  //#endregion
 
+  //#region belirttiğimiz token değerini silmemizi sağlar
   Future<void> _deleteToken() async {
     SharedPreferences tokenInfo = await SharedPreferences.getInstance();
     await tokenInfo.remove(_tokenKey);
@@ -61,7 +66,10 @@ class _LoginViewState extends State<LoginView> with UserLoginInformationValid {
       tokenString = '';
     });
   }
+  //#endregion
 
+  //#region _tokenKey değerinin varlığını kontrol eder. Eğer değer kaydedilmişse uygulama açıldığı zaman
+  //login ekranına değil userList ekranına yönlendirmeyi sağlar.
   _checkLoginStatus() async {
     SharedPreferences tokenInfo = await SharedPreferences.getInstance();
     bool hasTokenInfo = tokenInfo.containsKey(_tokenKey);
@@ -77,6 +85,7 @@ class _LoginViewState extends State<LoginView> with UserLoginInformationValid {
       }
     });
   }
+  //#endregion
 
   @override
   Widget build(BuildContext context) {
@@ -93,67 +102,72 @@ class _LoginViewState extends State<LoginView> with UserLoginInformationValid {
           ),
         ),
       ),
-      child: BlocConsumer<LoginCubit, AppStates>(
-        listener: (context, state) {
-          if (state is LoginComplete &&
-              userNameController(_userNameTextEditingController.text,
-                  _passwordTextEditingController.text)) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => UserList(
-                  model: state.model,
-                ),
-              ),
-            );
-            _userNameTextEditingController.text = '';
-            _passwordTextEditingController.text = '';
-            _saveToken();
-          } else {
-            flushbarWidget(
-              context,
-              AppConstants.failProcess,
-              AppConstants.checkYourLoginInformations,
-              const Duration(seconds: AppConstants.milliseconds5),
-            );
-          }
-        },
-        builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text(AppConstants.appBarTitleText),
-              centerTitle: true,
-              // leading:  Center(
-              //   child: Visibility(
-              //     visible: context.watch<LoginCubit>().isLoading,
-              //     child:const CircularProgressIndicator(),
-              //   ),
-              // ),
-              elevation: 0,
-              backgroundColor: AppConstants.colorTransparent,
-            ),
-            body: SingleChildScrollView(
-              child: Center(
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    children: [
-                      _loginLottie(screenHeight, screenWidth),
-                      _loginUserNameTextFormField(state),
-                      _heightGap(2),
-                      _loginPasswordTextFormField(state),
-                      _heightGap(5),
-                      _loginButton(screenWidth / 4, context),
-                      _forgotPassword(context)
-                    ],
-                  ),
-                ),
+      child: _bodyWidgets(screenHeight, screenWidth),
+    );
+  }
+  //#region _bodyWidgets
+  Widget _bodyWidgets(double screenHeight, double screenWidth) {
+    return BlocConsumer<LoginCubit, AppStates>(
+      listener: (context, state) {
+        if (state is LoginComplete &&
+            userNameController(_userNameTextEditingController.text,
+                _passwordTextEditingController.text)) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => UserList(
+                model: state.model,
               ),
             ),
           );
-        },
-      ),
+          _userNameTextEditingController.text = '';
+          _passwordTextEditingController.text = '';
+          _saveToken();
+        } else {
+          flushbarWidget(
+            context,
+            AppConstants.failProcess,
+            AppConstants.checkYourLoginInformations,
+            const Duration(seconds: AppConstants.milliseconds5),
+          );
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text(AppConstants.appBarTitleText),
+            centerTitle: true,
+            // leading:  Center(
+            //   child: Visibility(
+            //     visible: context.watch<LoginCubit>().isLoading,
+            //     child:const CircularProgressIndicator(),
+            //   ),
+            // ),
+            elevation: 0,
+            backgroundColor: AppConstants.colorTransparent,
+          ),
+          body: SingleChildScrollView(
+            child: Center(
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    _loginLottie(screenHeight, screenWidth),
+                    _loginUserNameTextFormField(state),
+                    _heightGap(2),
+                    _loginPasswordTextFormField(state),
+                    _heightGap(5),
+                    _loginButton(screenWidth / 4, context),
+                    _forgotPassword(context)
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
+  //#endregion
 
   //#region loginLottie
   LottieBuilder _loginLottie(double screenHeight, double screenWidth) {
@@ -188,8 +202,8 @@ class _LoginViewState extends State<LoginView> with UserLoginInformationValid {
       obscureText: false,
     );
   }
-
   //#endregion
+
   //#region loginTextFormField
   TextFormField _loginPasswordTextFormField(AppStates state) {
     return TextFormField(
@@ -251,6 +265,7 @@ class _LoginViewState extends State<LoginView> with UserLoginInformationValid {
     );
   }
   //#endregion
+
   //#region forgotPassword
   TextButton _forgotPassword(BuildContext context) {
     return TextButton(
@@ -262,8 +277,8 @@ class _LoginViewState extends State<LoginView> with UserLoginInformationValid {
     );
   }
   //#endregion
-
-//#region heightGap
+  
+  //#region heightGap
   Widget _heightGap(double coefValue) {
     return SizedBox(
       height: coefValue * 5,
